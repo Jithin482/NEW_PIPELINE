@@ -17,12 +17,12 @@ jobs:
         run: |
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > key.pem
           chmod 400 key.pem
-          scp -o StrictHostKeyChecking=no -i key.pem -r . ec2-user@${{ secrets.EC2_INSTANCE_IP }}:/home/ec2-user/app
+          scp -o StrictHostKeyChecking=no -i key.pem -r . ubuntu@${{ secrets.EC2_INSTANCE_IP }}:/home/ubuntu/app
 
       - name: Build and run Docker container on EC2 instance
         run: |
-          ssh -o StrictHostKeyChecking=no -i key.pem ec2-user@${{ secrets.EC2_INSTANCE_IP }} "
-            cd /home/ec2-user/app
+          ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@${{ secrets.EC2_INSTANCE_IP }} "
+            cd /home/ubuntu/app
             docker build -t my-app .
             docker stop my-app || true
             docker rm my-app || true
